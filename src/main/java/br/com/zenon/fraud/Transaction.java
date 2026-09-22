@@ -114,12 +114,12 @@ public class Transaction {
     @Override
     public String toString() {
         return  "  step:" + step + "\n"+
-                "  type:'" + type + "\n"+
+                "  type:" + type + "\n"+
                 "  amount:" + amount + "\n"+
-                "  nameOrig:'" + nameOrig + "\n"+
+                "  nameOrig:" + nameOrig + "\n"+
                 "  oldbalanceOrg:" + oldbalanceOrg + "\n"+
                 "  newbalanceOrig:" + newbalanceOrig + "\n"+
-                "  nameDest:'" + nameDest + "\n"+
+                "  nameDest:" + nameDest + "\n"+
                 "  oldbalanceDest:" + oldbalanceDest + "\n"+
                 "  newbalanceDest:" + newbalanceDest + "\n"+
                 "  isFraud:" + isFraud+"\n";
