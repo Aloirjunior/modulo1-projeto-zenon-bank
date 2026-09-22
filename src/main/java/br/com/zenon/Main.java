@@ -14,7 +14,7 @@ public class Main {
         transacoes.setTransacao(
            id,
            new Transaction(1,
-                   "PAYMENT",
+                   Type.PAYMENT,
                    new BigDecimal("9839.64"),
                    "C1231006815",
                    new BigDecimal("170136.0"),
@@ -31,7 +31,7 @@ public class Main {
         transacoes.setTransacao(
            id,
            new Transaction(743,
-                   "CASH_OUT",
+                   Type.CASH_OUT,
                    new BigDecimal("850002.52"),
                    "C1280323807",
                    new BigDecimal("850002.52"),

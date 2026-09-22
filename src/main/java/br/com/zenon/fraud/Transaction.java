@@ -1,12 +1,14 @@
 package br.com.zenon.fraud;
 
+import br.com.zenon.Type;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Transaction {
 
     private Integer step;
-    private String type;
+    private Type type;
     private BigDecimal amount;
     private String nameOrig;
     private BigDecimal oldbalanceOrg;
@@ -16,7 +18,7 @@ public class Transaction {
     private BigDecimal newbalanceDest;
     private Integer isFraud;
 
-    public Transaction(Integer step, String type, BigDecimal amount, String nameOrig, BigDecimal oldbalanceOrg, BigDecimal newbalanceOrig, String nameDest, BigDecimal oldbalanceDest, BigDecimal newbalanceDest, Integer isFraud) {
+    public Transaction(Integer step, Type type, BigDecimal amount, String nameOrig, BigDecimal oldbalanceOrg, BigDecimal newbalanceOrig, String nameDest, BigDecimal oldbalanceDest, BigDecimal newbalanceDest, Integer isFraud) {
         this.step = step;
         this.type = type;
         this.amount = amount;
@@ -37,11 +39,11 @@ public class Transaction {
         this.step = step;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
