@@ -113,6 +113,21 @@ public class Transaction {
 
     @Override
     public String toString() {
+        return "Transaction[" +
+                "step=" + step +
+                ", type=" + type +
+                ", amount=" + amount +
+                ", origin=TransactionCustomer[name=" + nameOrig+
+                ", oldbalanceOrg=" + oldbalanceOrg +
+                ", newbalanceOrig=" + newbalanceOrig +
+                "]recipient=TransactionCustomer[name=" + nameDest +
+                ", oldBalance=" + oldbalanceDest +
+                ", newbalance=" + newbalanceDest +
+                "], isFraud=" + isFraud +
+                "]\n\n";
+    }
+
+    public String toStringClear() {
         return  "  step:" + step + "\n"+
                 "  type:" + type + "\n"+
                 "  amount:" + amount + "\n"+
