@@ -8,33 +8,32 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TransactionIngestor {
-
-
     public TransactionIngestor(){}
-    public List<Transaction> recuperarListaArquivo(String nomeArquivo){
+
+    public List<Transaction> recuperarListaArquivo(String nomeArquivo, Integer limit){
         AtomicInteger countError = new AtomicInteger(0);
         try {
             List<Transaction> transactions = Files.readAllLines(Path.of("src/main/data/" + nomeArquivo))
-                    .stream()
+                    .parallelStream()
                     .skip(1)
-                    .limit(1000)
+                    .limit(limit)
                     .map(linha-> parseTransaction(linha, countError))
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .toList();
-            System.err.println(countError.get());
+            if(countError.get() > 0)
+                System.err.println(countError.get());
             return  transactions;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private Optional<Transaction> parseTransaction(String line, AtomicInteger erro){
+    static Optional<Transaction> parseTransaction(String line, AtomicInteger erro){
         String[] elements = line.split(",");
         try{
             return Optional.of(new Transaction(
@@ -47,7 +46,7 @@ public class TransactionIngestor {
                     new CostumerTransaction( String.valueOf(elements[6]),
                             BigDecimal.valueOf(Double.parseDouble(elements[7])),
                             BigDecimal.valueOf(Double.parseDouble(elements[8]))),
-                    Integer.parseInt(elements[9]))
+                    Integer.parseInt(elements[9]) == 1)
             );
         } catch (RuntimeException e) {
             erro.incrementAndGet();

@@ -4,10 +4,9 @@ import br.com.zenon.Type;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.Optional;
 
 public record Transaction(Integer step, Type type, BigDecimal amount, CostumerTransaction transactionOrig,
-                          CostumerTransaction transactionDest, Integer isFraud) {
+                          CostumerTransaction transactionDest, boolean isFraud) {
 
     public Transaction{
         Objects.requireNonNull(type);

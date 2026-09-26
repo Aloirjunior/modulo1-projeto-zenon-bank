@@ -5,6 +5,7 @@ import br.com.zenon.fraud.Transaction;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,10 +13,12 @@ public class Main {
     public static void main(String[] args) throws IOException {
         Transacoes transacoes = new Transacoes();
         TransactionIngestor transactionIngestor = new TransactionIngestor();
+        List<Transaction> listTransaction;
         int i = 0;
         while (i < 1) {
-            System.out.println("Caso 1: Para dados mok: ");
+            System.out.println("\nCaso 1: Para dados mok: ");
             System.out.println("Caso 2: Para carregar dados da tabela: ");
+            System.out.println("Caso 3: Para buscar fraudes: ");
             System.out.print("Digite um caso: ");
             int caso = Integer.parseInt(new Scanner(System.in).nextLine());
             switch (caso) {
@@ -24,10 +27,15 @@ public class Main {
                     break;
                 case 2:
                     System.out.print("Digite nome do arquivo: ");
-                    String nomeArquivo = new Scanner(System.in).nextLine();
-                    List<Transaction> listTransaction = transactionIngestor.recuperarListaArquivo(nomeArquivo);
+                    listTransaction = transactionIngestor.recuperarListaArquivo(new Scanner(System.in).nextLine(), 1000);
                     listTransaction.stream().limit(15).forEach(System.out::println);
                     System.out.println(listTransaction.size());
+                    break;
+                case 3:
+                    System.out.print("Digite nome do arquivo: ");
+                    FraudAnalyzer.findFrauds(transactionIngestor.recuperarListaArquivo(new Scanner(System.in).nextLine(), 50000));
+                    break;
+                default:
                     break;
             }
         }
@@ -47,7 +55,7 @@ public class Main {
                    new CostumerTransaction("M1979787155",
                    new BigDecimal("0.0"),
                    new BigDecimal("0.0")),
-                   0)
+                   false)
         );
         System.out.println("Transação "+id+":");
         System.out.println(transacoes.getTrasacao(id));
@@ -66,7 +74,7 @@ public class Main {
                            "C873221189",
                             new BigDecimal("6510099.11"),
                             new BigDecimal("7360101.63")),
-                   1)
+                   true)
         );
         System.out.println("Transação "+id+":");
         System.out.println(transacoes.getTrasacao(id));
