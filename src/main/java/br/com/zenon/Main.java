@@ -2,9 +2,12 @@ package br.com.zenon;
 
 import br.com.zenon.fraud.CostumerTransaction;
 import br.com.zenon.fraud.Transaction;
+import br.com.zenon.fraud.TransactionListRepository;
+import br.com.zenon.fraud.TransactionMapRepository;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.rmi.ServerException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -19,6 +22,7 @@ public class Main {
             System.out.println("\nCaso 1: Para dados mok: ");
             System.out.println("Caso 2: Para carregar dados da tabela: ");
             System.out.println("Caso 3: Para buscar fraudes: ");
+            System.out.println("Caso 4: Para buscar transaçoes por nome: ");
             System.out.print("Digite um caso: ");
             int caso = Integer.parseInt(new Scanner(System.in).nextLine());
             switch (caso) {
@@ -33,7 +37,31 @@ public class Main {
                     break;
                 case 3:
                     System.out.print("Digite nome do arquivo: ");
-                    FraudAnalyzer.findFrauds(transactionIngestor.recuperarListaArquivo(new Scanner(System.in).nextLine(), 50000));
+                    FraudAnalyzer.findFrauds(transactionIngestor.recuperarListaArquivo(
+                            new Scanner(System.in).nextLine(), 50_000));
+                    break;
+                case 4:
+                    System.out.print("Digite nome do arquivo: ");
+                    String nomeArq = new Scanner(System.in).nextLine();
+                    System.out.print("Digite nome do cliente: ");
+                    String nome = new Scanner(System.in).nextLine();
+                    List<Transaction> transactionObject = transactionIngestor.recuperarListaArquivo(nomeArq, 100_000);
+                    long startTimelist = System.nanoTime();
+                    new TransactionListRepository(transactionObject).findByName(nome)
+                            .ifPresentOrElse(
+                                    System.out::println,
+                                    ()-> System.out.println("Transação não encontrada para o cliente: " + nome)
+                            );
+                    System.out.print("\nTempo de busca LIST: " + (System.nanoTime() - startTimelist)/1000000.0);
+                    System.out.println("\n");
+                    long startTimeMap = System.nanoTime();
+                    new TransactionMapRepository(transactionObject).findByName(nome)
+                            .ifPresentOrElse(
+                                    System.out::println,
+                                    ()-> System.out.println("Transação não encontrada para o cliente: " + nome)
+                            );
+                    System.out.print("\nTempo de busca MAP: " + (System.nanoTime() - startTimeMap)/1000000.0);
+
                     break;
                 default:
                     break;

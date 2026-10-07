@@ -6,10 +6,11 @@ import br.com.zenon.fraud.Transaction;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class TransactionIngestor {
     public TransactionIngestor(){}
@@ -25,6 +26,27 @@ public class TransactionIngestor {
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .toList();
+            if(countError.get() > 0)
+                System.err.println(countError.get());
+            return  transactions;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Map<String, Transaction> recuperarMaptaArquivo(String nomeArquivo, Integer limit){
+        AtomicInteger countError = new AtomicInteger(0);
+        try {
+            Map<String, Transaction> transactions = Files.readAllLines(Path.of("src/main/data/" + nomeArquivo))
+                    .parallelStream()
+                    .skip(1)
+                    .limit(limit)
+                    .map(linha-> parseTransaction(linha, countError))
+                    .filter(Optional::isPresent)
+                    .collect(Collectors.toMap(
+                            transaction -> transaction.get().transactionOrig().name(),
+                            Optional::get
+                    ));
             if(countError.get() > 0)
                 System.err.println(countError.get());
             return  transactions;
