@@ -21,14 +21,20 @@ public class FraudAnalyzer {
 
     public static void findFrauds(List<Transaction> transactions){
         try {
-            System.out.println("1. Total de Fraudes: " + transactions.parallelStream().count());
+            System.out.println("1. Total de Fraudes: " + transactions.parallelStream()
+                    .filter(Transaction::isFraud)
+                    .count());
             System.out.println("2. Top 3 Fraudes de Maior Valor: ");
-            transactions.parallelStream().sorted(Comparator.comparing(Transaction::amount).reversed())
+            transactions.parallelStream()
+                    .filter(Transaction::isFraud)
+                    .sorted(Comparator.comparing(Transaction::amount).reversed())
                     .limit(3)
                     .map(Transaction::amount)
                     .toList().forEach(val-> System.out.printf("%.2f%n", val));
             System.out.println("3. Clientes Suspeitos: ");
-            transactions.parallelStream().collect(Collectors.groupingByConcurrent(
+            transactions.parallelStream()
+                    .filter(Transaction::isFraud)
+                    .collect(Collectors.groupingByConcurrent(
                        t -> t.transactionOrig().name(),
                        Collectors.reducing(
                                BigDecimal.ZERO,
@@ -41,10 +47,13 @@ public class FraudAnalyzer {
                     .limit(5)
                     .toList().forEach(t -> System.out.println(t.getKey()));
             System.out.println("4. Prejuízo Total: " + transactions.parallelStream()
+                    .filter(Transaction::isFraud)
                     .map(Transaction::amount)
                     .reduce(BigDecimal.ZERO,BigDecimal::add));
             System.out.println("5. Fraudes por Tipo: ");
-            transactions.parallelStream().collect(Collectors.groupingByConcurrent(
+            transactions.parallelStream()
+                    .filter(Transaction::isFraud)
+                    .collect(Collectors.groupingByConcurrent(
                             Transaction::type,
                             Collectors.counting()
                     )).forEach((type, aLong) -> {

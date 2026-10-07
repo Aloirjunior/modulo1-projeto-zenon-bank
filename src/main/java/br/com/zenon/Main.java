@@ -23,6 +23,7 @@ public class Main {
             System.out.println("Caso 2: Para carregar dados da tabela: ");
             System.out.println("Caso 3: Para buscar fraudes: ");
             System.out.println("Caso 4: Para buscar transaçoes por nome: ");
+            System.out.println("Caso 5: Para buscar transaçoes NIO: ");
             System.out.print("Digite um caso: ");
             int caso = Integer.parseInt(new Scanner(System.in).nextLine());
             switch (caso) {
